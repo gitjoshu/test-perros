@@ -34,7 +34,13 @@ export function Dogs() {
           <Loading />
         </div>
       ) : (
-        <div className="row m-0 col-12 justify-content-center">
+        <div
+          className={`row m-0 col-12 ${
+            dogsImages.dogImages.length === 0 && selectRef.current
+              ? "justify-content-center"
+              : ""
+          }`}
+        >
           {dogsImages.dogImages.length === 0 && selectRef.current !== "" && (
             <>
               <div className="col-12 d-flex justify-content-center">
