@@ -1,66 +1,38 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Select } from "../components/Select";
-import { ImageGallery } from "../components/ImageGallery";
+import React, { useRef } from "react";
+import { ImagesGallery } from "../components/ImagesGallery";
 import Loading from "../components/Loading";
-import { getAllDogsBreed } from "../services/Dogs";
-import { useDogsImages } from "../hooks/useDogsImages";
+import { Select } from "../components/Select";
+import { useGalleryImagesAPI } from "../hooks/useGalleryImagesAPI";
+import { useSelectAPI } from "../hooks/useSelectAPI";
+import { getAllDogsBreed, getDogsBreedImages } from "../services/Dogs";
 
 export function Dogs() {
-  const [dogs, setDogs] = useState([]);
-  const selectRef = useRef("");
-  const dogsImages = useDogsImages();
-  useEffect(() => {
-    getAllDogsBreed()
-      .then((response) => {
-        setDogs([...dogs, ...response]);
-      })
-      .catch((error) => console.log(error));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const selectRef = useRef();
+  const dogsImagesAPI = useGalleryImagesAPI(getDogsBreedImages);
+  const selectAPI = useSelectAPI(getAllDogsBreed);
+
   return (
     <>
       <div className="my-3 d-flex justify-content-center">
         <Select
           innerRef={selectRef}
-          options={dogs}
+          options={selectAPI.options}
           onChange={(dog) => {
             selectRef.current = dog;
-            dogsImages.changeDogsBreedImages(dog);
+            dogsImagesAPI.changeImagesGallery(dog);
           }}
         />
       </div>
-      {dogsImages.loading ? (
-        <div className="d-flex justify-content-center">
-          <Loading />
-        </div>
+      {dogsImagesAPI.loading ? (
+        <Loading />
       ) : (
-        <div
-          className={`row m-0 col-12 ${
-            dogsImages.dogImages.length === 0 && selectRef.current
-              ? "justify-content-center"
-              : ""
-          }`}
-        >
-          {dogsImages.dogImages.length === 0 && selectRef.current !== "" && (
-            <>
-              <div className="col-12 d-flex justify-content-center">
-                NO HAY IMÁGENES DEL TIPO DE RAZA {selectRef.current}, PERO
-                PODEMOS MOSTRAR TODAS LAS IMÁGENES QUE HAY DE SU RAZA
-              </div>
-              <div className="col-12 d-flex justify-content-center mt-3">
-                <button
-                  className="btn btn-primary"
-                  onClick={() =>
-                    dogsImages.changeDogsBreedImages(selectRef.current, "breed")
-                  }
-                >
-                  {selectRef.current.split("-")[0]}
-                </button>
-              </div>
-            </>
-          )}
-          <ImageGallery images={dogsImages.dogImages} />
-        </div>
+        <ImagesGallery
+          images={dogsImagesAPI.images}
+          changeImages={(ref, type) =>
+            dogsImagesAPI.changeImagesGallery(ref, type)
+          }
+          ref={selectRef}
+        />
       )}
     </>
   );

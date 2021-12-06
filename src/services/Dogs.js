@@ -25,7 +25,7 @@ export const getAllDogsBreed = async () => {
   return dogsFetchList;
 };
 
-export const getDogsBreedImages = async (dog, option) => {
+export const getDogsBreedImages = async (dog, option = "type") => {
   let dogBreedImagesFetchList = [];
   let dogToFetch = dog.toLowerCase().split("-")[0];
   await fetch(`https://dog.ceo/api/breed/${dogToFetch}/images`)

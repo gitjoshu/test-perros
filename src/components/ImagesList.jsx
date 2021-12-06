@@ -1,6 +1,6 @@
 import React from "react";
 
-export function ImageGallery(props) {
+export function ImagesList(props) {
   return (
     <>
       {props.images.map((item, index) => (
