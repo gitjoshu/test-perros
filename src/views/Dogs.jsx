@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { ImagesGallery } from "../components/ImagesGallery";
-import Loading from "../components/Loading";
 import { Select } from "../components/Select";
 import { useGalleryImagesAPI } from "../hooks/useGalleryImagesAPI";
 import { useSelectAPI } from "../hooks/useSelectAPI";
@@ -23,17 +22,14 @@ export function Dogs() {
           }}
         />
       </div>
-      {dogsImagesAPI.loading ? (
-        <Loading />
-      ) : (
-        <ImagesGallery
-          images={dogsImagesAPI.images}
-          changeImages={(ref, type) =>
-            dogsImagesAPI.changeImagesGallery(ref, type)
-          }
-          ref={selectRef}
-        />
-      )}
+      <ImagesGallery
+        images={dogsImagesAPI.images}
+        changeImages={(ref, type) =>
+          dogsImagesAPI.changeImagesGallery(ref, type)
+        }
+        ref={selectRef}
+        loading={dogsImagesAPI.loading}
+      />
     </>
   );
 }
