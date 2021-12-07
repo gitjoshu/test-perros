@@ -5,10 +5,9 @@ export function useSelectAPI(APIService) {
   useEffect(() => {
     APIService()
       .then((response) => {
-        setOptions([...options, ...response]);
+        setOptions(response);
       })
       .catch((error) => console.log(error));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [APIService]);
   return { options };
 }
